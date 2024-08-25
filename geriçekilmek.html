@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geri Çekme İşlemi - Kırmızı Kripto Para Dünyası</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #ff0000;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: glow 2s infinite alternate;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ff0000;
+            background-color: #000;
+            color: #ff0000;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff0000;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+        #errorMessage {
+            color: #ff0000;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #ff0000;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000; }
+            to { text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Geri Çekme İşlemi</h1>
+        <form id="withdrawForm">
+            <div class="form-group">
+                <label for="withdrawAmount">Miktar:</label>
+                <input type="number" id="withdrawAmount" required min="0" step="0.00000001">
+            </div>
+            <div class="form-group">
+                <label for="withdrawAddress">FaucetPay Adresi:</label>
+                <input type="text" id="withdrawAddress" required>
+            </div>
+            <button type="submit">Geri Çek</button>
+        </form>
+        <div id="errorMessage"></div>
+        <a href="anasayfa.html" class="back-link">Ana Sayfaya Dön</a>
+    </div>
+
+    <script>
+        const FAUCETPAY_API_KEY = 'YOUR_API_KEY_HERE';
+        const FAUCETPAY_API_BASE_URL = 'https://faucetpay.io/api/v1';
+
+        async function sendPayment(to, amount, currency = 'BTC') {
+            try {
+                const response = await fetch(`${FAUCETPAY_API_BASE_URL}/send`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        api_key: FAUCETPAY_API_KEY,
+                        to: to,
+                        amount: amount,
+                        currency: currency
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    return data.transaction_id;
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Ödeme gönderme hatası:', error);
+                throw error;
+            }
+        }
+
+        function displayError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        document.getElementById('withdrawForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const amount = document.getElementById('withdrawAmount').value;
+            const address = document.getElementById('withdrawAddress').value;
+            try {
+                const transactionId = await sendPayment(address, amount);
+                alert(`Geri çekme işlemi başarılı! İşlem ID: ${transactionId}`);
+                // İşlem başarılı olduktan sonra ana sayfaya yönlendir
+                window.location.href = 'anasayfa.html';
+            } catch (error) {
+                displayError('Geri çekme işlemi başarısız: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

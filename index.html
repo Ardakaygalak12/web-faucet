@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kırmızı Kripto Para Dünyası</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #000;
+            color: #ff0000;
+            overflow: hidden;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            color: #ff0000;
+            border: 1px solid #ff0000;
+            padding: 10px 20px;
+            font-size: 0.9vw;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: #ff0000;
+            color: #000;
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 3.5vw;
+            text-align: center;
+            margin-bottom: 30px;
+            animation: glow 2s infinite alternate;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: #ff0000;
+            border: 2px solid #ff0000;
+            padding: 15px 30px;
+            font-size: 1.2vw;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background-color: #ff0000;
+            color: #000;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-color: rgba(255, 0, 0, 0.1);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        .grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(#ff00001a 1px, transparent 1px),
+                linear-gradient(90deg, #ff00001a 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            padding: 40px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: transparent;
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        input::placeholder {
+            color: #ff0000;
+            opacity: 0.7;
+        }
+
+        #userInfo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ff0000;
+            font-size: 14px;
+        }
+
+        #background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+            }
+
+            to {
+                text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                transform: rotate(45deg) translate(-100%, -100%);
+            }
+
+            100% {
+                transform: rotate(45deg) translate(100%, 100%);
+            }
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(50px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="background"></canvas>
+    <div class="grid"></div>
+    <nav class="navbar">
+        <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="#ff0000" />
+            <path d="M30 70 L50 30 L70 70 L50 55 Z" fill="white" />
+        </svg>
+        <div class="nav-buttons">
+            <a href="girişyap.html">
+                <button class="nav-btn" onclick="showPage('login')">Giriş Yap</button>
+            </a>
+            <a href="kayıtol.html">
+                <button class="nav-btn" onclick="showPage('register')">Kayıt Ol</button>
+            </a>
+        </div>
+    </nav>
+    <div id="userInfo"></div>
+
+    <div id="homePage" class="container">
+        <h1>KIRMIZI KRİPTO PARA DÜNYASINA HOŞ GELDİNİZ</h1>
+        <button class="btn" onclick="kesfet()">KEŞFET</button>
+    </div>
+
+    <div id="loginPage" class="container" style="display:none;">
+        <div class="form-container">
+            <h1>GİRİŞ YAP</h1>
+            <input type="email" id="loginEmail" placeholder="E-posta" required>
+            <input type="password" id="loginPassword" placeholder="Şifre" required>
+            <button class="btn" onclick="login()">GİRİŞ</button>
+        </div>
+    </div>
+
+    <div id="registerPage" class="container" style="display:none;">
+        <div class="form-container">
+            <h1>KAYIT OL</h1>
+            <input type="text" id="registerUsername" placeholder="Kullanıcı Adı" required>
+            <input type="email" id="registerEmail" placeholder="E-posta" required>
+            <input type="password" id="registerPassword" placeholder="Şifre" required>
+            <button class="btn" onclick="register()">KAYIT OL</button>
+        </div>
+    </div>
+
+    <script>
+        // Arka plan animasyonu
+        const canvas = document.getElementById('background');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 100;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2 + 1,
+                dx: (Math.random() - 0.5) * 2,
+                dy: (Math.random() - 0.5) * 2
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            for (let i = 0; i < particleCount; i++) {
+                const p = particles[i];
+                ctx.moveTo(p.x, p.y);
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, true);
+            }
+            ctx.fill();
+            moveParticles();
+        }
+
+        function moveParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                const p = particles[i];
+                p.x += p.dx;
+                p.y += p.dy;
+                if (p.x < 0 || p.x > canvas.width) p.dx = -p.dx;
+                if (p.y < 0 || p.y > canvas.height) p.dy = -p.dy;
+            }
+        }
+
+        function animate() {
+            drawParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Pencere boyutu değiştiğinde canvas'ı yeniden boyutlandır
+        window.addEventListener('resize', function () {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function showPage(pageId) {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('registerPage').style.display = 'none';
+            document.getElementById(pageId + 'Page').style.display = 'flex';
+        }
+
+        function register() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            if (users.some(user => user.email === email)) {
+                alert('Bu e-posta adresi zaten kullanılıyor.');
+                return;
+            }
+
+            const newUser = {
+                id: generateUUID(),
+                username: username,
+                email: email,
+                password: password
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+            showPage('login');
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                updateUserInfo();
+                showPage('home');
+            } else {
+                alert('Geçersiz e-posta veya şifre.');
+            }
+        }
+
+        function kesfet() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                alert('Keşfet butonuna tıklandı! Hoş geldin, ' + currentUser.username);
+            } else {
+                alert('Keşfetmek için önce giriş yapmalısınız.');
+                showPage('login');
+            }
+        }
+
+        function updateUserInfo() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userInfoDiv = document.getElementById('userInfo');
+
+            if (currentUser) {
+                userInfoDiv.textContent = `Hoş geldin, ${currentUser.username}!`;
+            } else {
+                userInfoDiv.textContent = '';
+            }
+        }
+
+        document.querySelector('.logo').addEventListener('click', function () {
+            showPage('home');
+        });
+
+        // Sayfa yüklendiğinde kullanıcı bilgisini güncelle
+        document.addEventListener('DOMContentLoaded', updateUserInfo);
+    </script>
+</body>
+
+</html>
